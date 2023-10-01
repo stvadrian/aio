@@ -330,10 +330,4 @@ class UserController extends Controller
         $reports = DB::table('report_list')->where('kd_rumah_sakit', auth()->user()->kd_rumah_sakit)->get();
         return view('umum.pages.report_generator')->with(['reports' => $reports]);
     }
-
-    public function viewCVForm()
-    {
-        $pageHeader = 'CV Builder';
-        return view('umum.pages.cv_builder_form', compact('pageHeader'));
-    }
 }
