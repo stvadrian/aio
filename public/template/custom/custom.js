@@ -168,6 +168,7 @@ function scrollToTop(amount) {
 
 function generateChart(chartId, chartData) {
     var ctx = $(chartId)[0].getContext('2d');
+
     var datasets = [];
 
     chartData.datasets.forEach(function (dataset) {

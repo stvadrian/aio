@@ -29,10 +29,19 @@ class Controller extends BaseController
 
         $this->middleware(function ($request, $next) {
             if (Auth::check()) {
-                $branch = auth()->user()->BranchID;
-                if ($branch == 1) {
-                    // $this->connection = DB::connection('');
-                    // Used for multiple database each branches
+                $branch = auth()->user()->kd_cabang;
+                switch ($branch) {
+                    case 1:
+                        // $this->connection = DB::connection('');
+                        // Used for multiple database each branches
+                        $this->cabang = (object) [
+                            'logo' => $this->encodeImage(storage_path() . '/app/public/logo.png'),
+                        ];
+                        break;
+
+                    default:
+                        abort(404, 'Invalid Request');
+                        break;
                 }
             }
             return $next($request);
@@ -201,6 +210,12 @@ class Controller extends BaseController
         $data = file_get_contents($path);
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         return $base64;
+    }
+
+    public function generatePDF($data, $templatePath, $pdfName)
+    {
+        $pdf = PDF::loadView($templatePath, compact('data'));
+        return $pdf->stream($pdfName . '.pdf');
     }
 
     public function sanitizeFormName($form_name)

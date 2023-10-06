@@ -3,14 +3,11 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
-
-use App\Models\Cabang;
-use App\Models\Departemen;
+ 
 use App\Models\MenuHeader;
 use App\Models\MenuItem;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 
 class AuthServiceProvider extends ServiceProvider

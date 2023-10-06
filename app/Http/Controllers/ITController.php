@@ -10,8 +10,9 @@ use App\Models\MenuHeader;
 use App\Models\MenuItem;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\UsersImport;
 
 class ITController extends Controller
 {
@@ -240,6 +241,15 @@ class ITController extends Controller
 
     public function viewUsers(Request $request)
     {
+        if ($request->has('upload_excel')) {
+            $request->validate([
+                'file' => 'required|file|mimes:xlsx,xls',
+            ]);
+            $file = $request->file('file');
+            Excel::import(new UsersImport, $file);
+
+            return back()->with(['success' => 'Users imported successfully!']);
+        }
         if ($request->has('add')) {
             $username = $request->username;
             $mobile = $request->mobile;

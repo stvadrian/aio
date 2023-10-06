@@ -50,51 +50,120 @@ class UserController extends Controller
 
     public function viewDashboard()
     {
-        $barDatasets = [
-            [
-                'label' => 'Dataset 1',
-                'data' => [12, 19, 3, 17, 28],
-                'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
-                'borderColor' => 'rgba(75, 192, 192, 1)',
-                'borderWidth' => 1,
-            ],
-            [
-                'label' => 'Dataset 2',
-                'data' => [8, 15, 6, 12, 22],
-                'backgroundColor' => 'rgba(255, 99, 132, 0.2)',
-                'borderColor' => 'rgba(255, 99, 132, 1)',
-                'borderWidth' => 1,
-            ],
-        ];
+        $registrationData = DB::select("
+        WITH Months AS (
+            SELECT 1 AS MonthNumber UNION ALL
+            SELECT 2 UNION ALL
+            SELECT 3 UNION ALL
+            SELECT 4 UNION ALL
+            SELECT 5 UNION ALL
+            SELECT 6 UNION ALL
+            SELECT 7 UNION ALL
+            SELECT 8 UNION ALL
+            SELECT 9 UNION ALL
+            SELECT 10 UNION ALL
+            SELECT 11 UNION ALL
+            SELECT 12
+          )
+          SELECT
+            m.MonthNumber,
+            d.nm_departemen,
+            COUNT(u.id) AS RegistrationCount
+          FROM Months m
+          CROSS JOIN (
+            SELECT DISTINCT dept.nm_departemen, users.kd_departemen FROM users INNER JOIN departemens dept ON users.kd_departemen = dept.kd_departemen
+          ) d
+          LEFT JOIN users u ON MONTH(u.created_at) = m.MonthNumber AND u.kd_departemen = d.kd_departemen 
+          GROUP BY m.MonthNumber, d.nm_departemen 
+          ORDER BY m.MonthNumber, d.nm_departemen
+        ");
+
+        $datasets = [];
+        $months = [];
+        $departments = [];
+
+        foreach ($registrationData as $row) {
+            $month = date('F', mktime(0, 0, 0, $row->MonthNumber, 1));
+            $department = $row->nm_departemen;
+            $count = $row->RegistrationCount;
+
+            // Add the month to the list of months (unique)
+            if (!in_array($month, $months)) {
+                $months[] = $month;
+            }
+
+            // Add the department to the list of departments (unique)
+            if (!in_array($department, $departments)) {
+                $departments[] = $department;
+            }
+
+            // Create a unique dataset key based on the department
+            $datasetKey = $department;
+
+            // Initialize the dataset for the department if it doesn't exist
+            if (!isset($datasets[$datasetKey])) {
+                $datasets[$datasetKey] = [
+                    'label' => $department,
+                    'data' => [],
+                    'backgroundColor' => 'rgba(75, 192, 192, 0.2)', // Change as needed
+                    'borderColor' => 'rgba(75, 192, 192, 1)', // Change as needed
+                    'borderWidth' => 1,
+                ];
+            }
+
+            // Fill in the dataset with registration counts for each month
+            $datasets[$datasetKey]['data'][] = $count;
+        }
+        $labels = $months; // An array of month labels
+
         $barChartData = [
-            'labels' => ['Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5'],
-            'datasets' => $barDatasets,
-            'chartType' => 'bar',
+            'labels' => $labels,
+            'datasets' => array_values($datasets), // Convert the associative array to indexed array
+            'chartType' => 'bar', // Change as needed (e.g., 'bar', 'line', 'pie')
             'chartOptions' => [
                 'title' => [
                     'display' => true,
-                    'text' => 'Dynamic Bar Chart',
+                    'text' => 'User Registrations by Department',
                 ],
             ],
         ];
 
-        $pieDatasets = [
-            [
-                'label' => 'Dataset 1',
-                'data' => [12, 19, 3, 17, 28],
-                'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
-                'borderColor' => 'rgba(75, 192, 192, 1)',
-                'borderWidth' => 1,
-            ],
-        ];
+
+
+        ////////////////////////////////////////////
+
+        $userRegistrations = User::select(
+            DB::raw('MONTH(created_at) as MONTH'),
+            DB::raw('COUNT(*) as COUNT')
+        )
+            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->orderBy('MONTH', 'asc')
+            ->get();
+        $labels = [];
+        $data = [];
+
+        foreach ($userRegistrations as $registration) {
+            $fullMonthName = date('F', strtotime("2023-$registration->MONTH-01"));
+            $labels[] = $fullMonthName;
+            $data[] = $registration->COUNT;
+        }
+
         $pieChartData = [
-            'labels' => ['Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5'],
-            'datasets' => $pieDatasets,
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => 'User per Month',
+                    'data' => $data,
+                    'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
+                    'borderColor' => 'rgba(75, 192, 192, 1)',
+                    'borderWidth' => 1,
+                ]
+            ],
             'chartType' => 'pie',
             'chartOptions' => [
                 'title' => [
                     'display' => true,
-                    'text' => 'Dynamic Pie Chart',
+                    'text' => 'Grafik Registrasi User Tahun 2023',
                 ],
             ],
         ];

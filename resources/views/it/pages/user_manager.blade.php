@@ -7,66 +7,71 @@
                 {{ $pageHeader }}
             </div>
 
-            @component('components.modal_add')
-                @slot('modal_body_add')
-                    <div class="form-group mb-3">
-                        <label class="form-label" for="username">Username</label>
-                        <input type="text" name="username" id="username" class="form-control nospaces"
-                            value="{{ old('username') }}">
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label" for="nama_lengkap">Nama Lengkap</label>
-                        <input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control isalpha spaces"
-                            value="{{ old('nama_lengkap') }}">
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label" for="dob">Tanggal Lahir</label>
-                        <input type="text" name="dob" id="dob" class="form-control custom-date"
-                            value="{{ old('dob') }}" placeholder="dd / mm / yyyy">
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label" for="mobile">Mobile Number</label>
-                        <input type="text" name="mobile" id="mobile" class="form-control isnumber"
-                            value="{{ old('mobile') }}">
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label" for="departemen">Departemen</label>
-                        <select name="departemen" id="departemen" class="select2" data-parent="modal_add">
-                            <option value="" selected disabled>-- Select One --</option>
-                            @foreach ($departemens as $departemen)
-                                <option value="{{ $departemen->kd_departemen }}"
-                                    {{ old('departemen') == $departemen->kd_departemen ? 'selected' : '' }}>
-                                    {{ $departemen->nm_departemen }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label" for="hak_akses">Hak Akses</label>
-                        <select name="hak_akses" id="hak_akses" class="form-control form-select">
-                            <option value="" selected disabled>-- Select One --</option>
-                            @foreach ($hak_akses as $akses)
-                                <option value="{{ $akses->kd_hak_akses }}"
-                                    {{ old('hak_akses') == $akses->kd_hak_akses ? 'selected' : '' }}>
-                                    {{ $akses->nm_hak_akses }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label" for="cabang">Cabang</label>
-                        <select name="cabang" id="cabang" class="form-control form-select">
-                            <option value="" selected disabled>-- Select One --</option>
-                            @foreach ($cabangs as $cabang)
-                                <option value="{{ $cabang->kd_cabang }}"
-                                    {{ old('cabang') == $cabang->kd_cabang ? 'selected' : '' }}>
-                                    {{ $cabang->nm_cabang }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                @endslot
-            @endcomponent
+            <div class="d-flex gap-1">
+                @component('components.modal_add')
+                    @slot('modal_body_add')
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="username">Username</label>
+                            <input type="text" name="username" id="username" class="form-control nospaces"
+                                value="{{ old('username') }}">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="nama_lengkap">Nama Lengkap</label>
+                            <input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control isalpha spaces"
+                                value="{{ old('nama_lengkap') }}">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="dob">Tanggal Lahir</label>
+                            <input type="text" name="dob" id="dob" class="form-control custom-date"
+                                value="{{ old('dob') }}" placeholder="dd / mm / yyyy">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="mobile">Mobile Number</label>
+                            <input type="text" name="mobile" id="mobile" class="form-control isnumber"
+                                value="{{ old('mobile') }}">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="departemen">Departemen</label>
+                            <select name="departemen" id="departemen" class="select2" data-parent="modal_add">
+                                <option value="" selected disabled>-- Select One --</option>
+                                @foreach ($departemens as $departemen)
+                                    <option value="{{ $departemen->kd_departemen }}"
+                                        {{ old('departemen') == $departemen->kd_departemen ? 'selected' : '' }}>
+                                        {{ $departemen->nm_departemen }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="hak_akses">Hak Akses</label>
+                            <select name="hak_akses" id="hak_akses" class="form-control form-select">
+                                <option value="" selected disabled>-- Select One --</option>
+                                @foreach ($hak_akses as $akses)
+                                    <option value="{{ $akses->kd_hak_akses }}"
+                                        {{ old('hak_akses') == $akses->kd_hak_akses ? 'selected' : '' }}>
+                                        {{ $akses->nm_hak_akses }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="cabang">Cabang</label>
+                            <select name="cabang" id="cabang" class="form-control form-select">
+                                <option value="" selected disabled>-- Select One --</option>
+                                @foreach ($cabangs as $cabang)
+                                    <option value="{{ $cabang->kd_cabang }}"
+                                        {{ old('cabang') == $cabang->kd_cabang ? 'selected' : '' }}>
+                                        {{ $cabang->nm_cabang }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endslot
+                @endcomponent
+
+                @include('components.upload_excel')
+            </div>
+
 
             @component('components.table_data', ['dataTableType' => 'js-dataTable-buttons'])
                 @slot('table_header')
