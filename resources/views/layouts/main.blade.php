@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="{{ session('darkmode') ? 'dark' : 'light' }}">
 
 <head>
     <meta charset="utf-8">
@@ -31,7 +31,7 @@
 </head>
 
 
-<body class="bg-body-secondary" data-bs-theme="{{ session('darkmode') ? 'dark' : 'light' }}">
+<body class="bg-body-secondary">
     <div class="page-wrapper mini-sidebar" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
         data-sidebartype="mini-sidebar" data-sidebar-position="fixed" data-header-position="fixed">
 
