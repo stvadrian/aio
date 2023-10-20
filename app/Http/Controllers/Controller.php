@@ -488,4 +488,13 @@ class Controller extends BaseController
         $response = response()->download($excelFilePath, $fileName)->deleteFileAfterSend(true);
         return $response;
     }
+
+    public function customResponse($statusCode, $data, $customHeader = null)
+    {
+        $response = response()->json($data, $statusCode);
+        if (isset($customHeader)) {
+            $response->header('X-Custom-Header', $customHeader);
+        }
+        return $response;
+    }
 }

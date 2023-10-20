@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LiveChat;
 use App\Models\QR;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use ConsoleTVs\Charts\Facades\Charts;
 
 
 class UserController extends Controller
@@ -48,7 +49,19 @@ class UserController extends Controller
         return redirect('/user-manager')->with(['success' => 'Impersonation stopped']);
     }
 
-    public function viewDashboard()
+    public function fetchTask()
+    {
+        $user = auth()->user();
+        $tasks = $user->createdTasks;
+        return $tasks;
+    }
+
+    public function fetchLiveChat()
+    {
+        return LiveChat::with('user')->get();
+    }
+
+    public function viewDashboard(Request $request)
     {
         $registrationData = DB::select("
         WITH Months AS (
@@ -168,7 +181,32 @@ class UserController extends Controller
             ],
         ];
 
-        return view('umum.pages.dashboard', compact('barChartData', 'pieChartData'));
+        if ($request->has('add_task')) {
+            $task = $request->input('add-task-list');
+            try {
+                Task::create([
+                    'task_description' => $task,
+                    'user_id' => auth()->user()->id
+                ]);
+                return back()->with(['success' => 'Successfully Added Task!']);
+            } catch (\Throwable $th) {
+                return back()->with(['error' => 'Failed to Add Task!']);
+            }
+        }
+        if ($request->has('delete')) {
+            $taskId = $request->input('taskid');
+            try {
+                Task::whereId($taskId)->delete();
+                return back()->with(['success' => 'Successfully Delete Task!']);
+            } catch (\Throwable $th) {
+                return back()->with(['error' => 'Failed to Delete Task!']);
+            }
+        }
+        $tasks = $this->fetchTask();
+
+        $liveChats = $this->fetchLiveChat();
+
+        return view('umum.pages.dashboard', compact('barChartData', 'pieChartData', 'tasks', 'liveChats'));
     }
 
     public function viewProfile(Request $request)

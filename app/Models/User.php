@@ -67,9 +67,20 @@ class User extends Authenticatable
     {
         return $this->belongsTo(HakAkses::class, 'hak_akses');
     }
+
     public function createdQR()
     {
         return $this->hasMany(QR::class, 'created_by');
+    }
+
+    public function createdTasks()
+    {
+        return $this->hasMany(Task::class, 'user_id');
+    }
+
+    public function liveChats()
+    {
+        return $this->hasMany(LiveChat::class, 'user_id');
     }
 
     public function sentMessages()

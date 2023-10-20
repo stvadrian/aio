@@ -86,10 +86,13 @@
 <script nonce={{ $nonce }} src="{{ asset('plugins/summernote/summernote-lite.min.js') }}"></script>
 <!-- ChartJS -->
 <script nonce={{ $nonce }} src="{{ asset('plugins/chart.js/Chart.bundle.min.js') }}"></script>
+{{-- Broadcaster  --}}
+<script nonce={{ $nonce }} src="{{ asset('plugins/socketio.js') }}"></script>
 
 <script nonce="{{ $nonce }}" src="{{ asset('template/custom/custom.js') }}"></script>
 <script nonce="{{ $nonce }}" src="{{ asset('template/' . $template . '/js/' . $template . '.min.js') }}">
 </script>
+
 
 @if (session('success'))
     <script nonce="{{ $nonce }}">
