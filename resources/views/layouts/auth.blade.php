@@ -28,8 +28,8 @@
             <div class="col-lg-6 text-center my-4">
                 <img src="{{ asset('img/logo.png') }}" alt="" class="w-25 mb-3">
                 <h3 class="w-100">
-                    INTERSYSTEMS TRAKCARE <br>
-                    RSDH LIVE
+                    ALL IN ONE SYSTEM ADMIN <br>
+                    LIVE
                 </h3>
             </div>
             <div class="col-lg-6">
